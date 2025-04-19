@@ -1,1 +1,1 @@
-# pdx-cs586-rust-recipes-webapp
+# PDX PSU CS-586 Spring 2025 Rust Web `recipe-server`
