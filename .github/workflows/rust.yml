@@ -17,7 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      run: cargo build
-    - name: Clippy
-      run: cargo clippy
-
+      env:
+        - DATABASE_URL: "sqlite://db.db"
+      run: |
+        cargo build && \
+           cargo clippy && \
+           cargo run --release -- --init-from assets/static/jokes.json --db-uri 'sqlite://db.db'
