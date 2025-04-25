@@ -18,7 +18,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build
       env:
-        - DATABASE_URL: "sqlite://db.db"
+        DATABASE_URL: "sqlite://db.db"
       run: |
         cargo build && \
            cargo clippy && \
