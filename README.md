@@ -8,9 +8,22 @@ Much of the original inspiration for the web app itself comes from code written 
 
 
 ### Build instructions
+Clean up any db mess and make sure db parts are prepared and passing:
+```
+$ rm -f db.db
+$ export DATABASE_URL="sqlite://db.db"
+$ sqlx database create
+$ sqlx migrate add -r -s migrate
+$ sqlx migrate info --source ./migrations/
+1/pending migrate
+$ sqlx migrate run
+Applied 1/migrate migrate (9.779057ms)
+$ cargo sqlx prepare --check
+```
 Build and run it with cargo
 ```
-cargo build
-cargo clippy
-cargo run
+$ export DATABASE_URL='sqlite://db.db'
+$ cargo build && \
+   cargo clippy && \
+   cargo run --release -- --init-from assets/static/jokes.json --db-uri 'sqlite://db.db'
 ```

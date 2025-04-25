@@ -1,3 +1,4 @@
 recipes
 target
 db.db-*
+.*.sw*
