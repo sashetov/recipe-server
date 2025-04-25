@@ -22,4 +22,4 @@ jobs:
       run: |
         cargo build && \
            cargo clippy && \
-           cargo run --release -- --init-from assets/static/jokes.json --db-uri 'sqlite://db.db'
+           cargo run --release -- --init-from assets/static/recipes.json --db-uri 'sqlite://db.db'

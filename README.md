@@ -7,8 +7,7 @@ Serves MIT licensed recipes. Recipes retrieved from https://github.com/Donearm/C
 Much of the original inspiration for the web app itself comes from code written during the rust class, so from different branches in this repository: https://github.com/pdx-cs-rust-web/knock-knock, which is also MIT licensed, for similar reasons.
 
 
-### Build instructions
-Clean up any db mess and make sure db parts are prepared and passing:
+### Initial setup and migrations:
 ```
 $ rm -f db.db
 $ export DATABASE_URL="sqlite://db.db"
@@ -20,10 +19,11 @@ $ sqlx migrate run
 Applied 1/migrate migrate (9.779057ms)
 $ cargo sqlx prepare --check
 ```
-Build and run it with cargo
+
+### Build and run it with cargo
 ```
 $ export DATABASE_URL='sqlite://db.db'
 $ cargo build && \
    cargo clippy && \
-   cargo run --release -- --init-from assets/static/jokes.json --db-uri 'sqlite://db.db'
+   cargo run --release -- --init-from assets/static/recipes.json --db-uri 'sqlite://db.db'
 ```
