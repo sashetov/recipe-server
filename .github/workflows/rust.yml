@@ -21,5 +21,4 @@ jobs:
         DATABASE_URL: "sqlite://db.db"
       run: |
         cargo build && \
-           cargo clippy && \
-           cargo run --release -- --init-from assets/static/recipes.json --db-uri 'sqlite://db.db'
+        cargo clippy
