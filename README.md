@@ -1,4 +1,4 @@
-# PDX PSU CS-586 Spring 2025 Rust Web
+# PDX PSU CS-586 Spring 2025 Rust Web ![Build Status](https://github.com/sashetov/recipe-server/actions/workflows/rust.yml/badge.svg)
 ## `recipe-server`
 ### Description
 
