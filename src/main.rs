@@ -6,6 +6,7 @@ use error::*;
 use recipe::*;
 use templates::*;
 
+extern crate log;
 extern crate mime;
 
 use axum::{self, extract::State, response, routing};
@@ -28,16 +29,20 @@ struct Args {
 
 struct AppState {
     db: SqlitePool,
+    current_recipe: Recipe,
 }
 
 async fn get_recipe(State(app_state): State<Arc<RwLock<AppState>>>) -> response::Html<String> {
-    let app_state = app_state.read().await;
+    let mut app_state = app_state.write().await;
     let db = &app_state.db;
     let recipe = sqlx::query_as!(Recipe, "SELECT * FROM recipes ORDER BY RANDOM() LIMIT 1;")
         .fetch_one(db)
-        .await
-        .unwrap();
-    let recipe = IndexTemplate::recipe(&recipe);
+        .await;
+    match recipe {
+      Ok(recipe) => app_state.current_recipe = recipe,
+      Err(e) => log::warn!("recipe fetch failed: {}", e),
+    }
+    let recipe = IndexTemplate::recipe(&app_state.current_recipe);
     response::Html(recipe.to_string())
 }
 
@@ -79,20 +84,48 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
     sqlx::migrate!().run(&db).await?;
     if let Some(path) = args.init_from {
         let recipes = read_recipes(path)?;
-        let mut tx = db.begin().await?;
-        for r in &recipes{
-            sqlx::query!(
-                "INSERT INTO recipes(title, category, preparation) VALUES ($1, $2, $3);",
+'next_recipe:
+        for rr in recipes {
+            let mut rtx = db.begin().await?;
+            let (r, is) = rr.to_recipe();
+            let recipe_insert = sqlx::query!(
+                "INSERT INTO recipes (id, title, category, preparation) VALUES ($1, $2, $3, $4);",
+                r.id,
                 r.title,
                 r.category,
                 r.preparation,
             )
-            .execute(&mut *tx)
-            .await?;
+            .execute(&mut *rtx)
+            .await;
+            if let Err(e) = recipe_insert {
+                eprintln!("error: recipe insert: {}: {}", r.id, e);
+                rtx.rollback().await?;
+                continue;
+            };
+            for i in is {
+                let ingredient_insert = sqlx::query!(
+                    "INSERT INTO ingredients (recipe_id, ingredient_amount) VALUES ($1, $2);",
+                    r.id,
+                    i,
+                )
+                .execute(&mut *rtx)
+                .await;
+                if let Err(e) = ingredient_insert {
+                    eprintln!("error: ingredient insert: {} {}: {}", r.id, i, e);
+                    rtx.rollback().await?;
+                    continue 'next_recipe;
+                };
+            }
+            rtx.commit().await?;
         }
-        tx.commit().await?;
     }
-    let state = Arc::new(RwLock::new(AppState { db }));
+     let current_recipe = Recipe {
+         id: 0,
+         title: "thing".to_string(),
+         category: "thingies".to_string(),
+         preparation: "notreal".to_string(),
+     };
+    let state = Arc::new(RwLock::new(AppState { db, current_recipe }));
 
     tracing_subscriber::registry()
         .with(
