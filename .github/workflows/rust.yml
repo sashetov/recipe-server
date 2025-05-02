@@ -16,9 +16,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build
+    - name: Build Release
       env:
         DATABASE_URL: "sqlite://db.db"
       run: |
-        cargo build && \
+        cargo build --release
+    - name: Clippy
+      env:
+        DATABASE_URL: "sqlite://db.db"
+      run: |
         cargo clippy
