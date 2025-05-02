@@ -19,3 +19,9 @@ h1 {
 .error {
     color: #881111;
 }
+
+.recipes {
+    font-style: italic;
+    font-size: 75%;
+    margin-left: 3em;
+}

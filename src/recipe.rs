@@ -1,6 +1,7 @@
-use std::path::Path;
 use std::collections::HashSet;
 use std::ops::Deref;
+use std::path::Path;
+
 use crate::RecipeError;
 
 use serde::Deserialize;
@@ -14,12 +15,14 @@ pub struct JsonRecipe {
     preparation: String,
 }
 
+#[derive(Clone)]
 pub struct Recipe {
     pub id: i64,
     pub title: String,
     pub category: String,
     pub preparation: String,
 }
+
 pub fn read_recipes<P: AsRef<Path>>(recipes_path: P) -> Result<Vec<JsonRecipe>, RecipeError> {
     let f = std::fs::File::open(recipes_path.as_ref())?;
     let recipes = serde_json::from_reader(f)?;
