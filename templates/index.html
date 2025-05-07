@@ -11,6 +11,13 @@
       <span class="data">{{recipe.category}}</span><br/>
       <span class="data">{{recipe.preparation}}</span><br/>
   </div>
-  <span class="ingredients">ingredients: {{ingredients}}</span>
+  <div class="info">
+      <span class="ingredients">ingredients: {{ingredients}}</span>
+  </div>
+  <form>
+    <label>Ingredients/Amounts(comma separated):</label>
+    <input type="text" name="ingredients"/>
+    <button type="submit">New Recipe</button>
+  </form>
   </body>
 </html>
