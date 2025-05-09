@@ -36,30 +36,17 @@ pub async fn get_recipe(
     State(app_state): State<Arc<RwLock<AppState>>>,
     Query(params): Query<GetRecipeParams>,
 ) -> Result<response::Response, http::StatusCode> {
-    let mut app_state = app_state.write().await;
-    let db = app_state.db.clone();
+    let mut app_writer = app_state.write().await;
+    let db = app_writer.db.clone();
 
-
+    // Specified.
     if let GetRecipeParams { id: Some(id), .. } = params {
-        let recipe_result = sqlx::query_as!(Recipe, "SELECT * FROM recipes WHERE id = $1;", id)
-            .fetch_one(&db)
-            .await;
+        let recipe_result = recipe::get(&db, &id).await;
         let result = match recipe_result {
-            Ok(recipe) => {
-                let mut ingredients =
-                    sqlx::query_scalar!("SELECT ingredient_amount FROM ingredients WHERE recipe_id = $1;", recipe.id)
-                        .fetch(&db);
-                let mut ingredients_list: Vec<String> = Vec::new();
-                while let Some(ingredient) = ingredients.next().await {
-                    let ingredient = ingredient.unwrap_or_else(|e| {
-                        log::error!("ingredient fetch failed: {}", e);
-                        panic!("ingredient fetch failed")
-                    });
-                    ingredients_list.push(ingredient);
-                }
-                let ingredients_string = ingredients_list.join(", ");
+            Ok((recipe, ingredients)) => {
+                let ingredients_string = ingredients.join(", ");
 
-                app_state.current_recipe = recipe.clone();
+                app_writer.current_recipe = recipe.clone();
                 let recipe = IndexTemplate::new(recipe.clone(), ingredients_string);
                 Ok(response::Html(recipe.to_string()).into_response())
             }
@@ -89,16 +76,16 @@ pub async fn get_recipe(
                 return Ok(response::Redirect::to(&uri).into_response());
             }
             Ok(None) => {
-                log::info!("recipe by ingredients selection was empty");
+                log::info!("recipe by ingredietns selection was empty");
             }
             Err(e) => {
-                log::error!("recipes by ingredients selection database error: {}", e);
-                panic!("recipes by ingredients selection database error");
+                log::error!("recipe by ingredients selection database error: {}", e);
+                panic!("recipe by ingredients selection database error");
             }
         }
     }
 
-
+    // Random.
     let recipe_result = sqlx::query_scalar!("SELECT id FROM recipes ORDER BY RANDOM() LIMIT 1;")
         .fetch_one(&db)
         .await;

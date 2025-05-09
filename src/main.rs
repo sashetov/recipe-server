@@ -2,28 +2,27 @@ mod error;
 mod recipe;
 mod templates;
 mod web;
+mod api;
 
 use error::*;
 use recipe::*;
 use templates::*;
-use web::*;
 
 extern crate log;
 extern crate mime;
 
 use axum::{
     self,
-    extract::{Query, State},
+    extract::{Path, Query, State},
     http,
     response::{self, IntoResponse},
     routing,
 };
 use clap::Parser;
 extern crate fastrand;
-use serde::Deserialize;
+use serde::{Serialize, Deserialize};
 use sqlx::{Row, SqlitePool, migrate::MigrateDatabase, sqlite};
 use tokio::{net, sync::RwLock};
-use tokio_stream::StreamExt;
 use tower_http::{services, trace};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -134,9 +133,20 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         .make_span_with(trace::DefaultMakeSpan::new().level(tracing::Level::INFO))
         .on_response(trace::DefaultOnResponse::new().level(tracing::Level::INFO));
 
+    let apis = axum::Router::new()
+        .route("/recipe/{recipe_id}", routing::get(api::get_recipe));
+
+    let cors = tower_http::cors::CorsLayer::new()
+        .allow_methods([http::Method::GET])
+        .allow_origin(tower_http::cors::Any);
+
+    async fn handler_404() -> axum::response::Response {
+        (http::StatusCode::NOT_FOUND, "404 Not Found").into_response()
+    }
+
     let mime_favicon = "image/vnd.microsoft.icon".parse().unwrap();
     let app = axum::Router::new()
-        .route("/", routing::get(get_recipe))
+        .route("/", routing::get(web::get_recipe))
         .route_service(
             "/style.css",
             services::ServeFile::new_with_mime("assets/static/style.css", &mime::TEXT_CSS_UTF_8,),
@@ -145,6 +155,9 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
             "/favicon.ico",
             services::ServeFile::new_with_mime( "assets/static/favicon.ico", &mime_favicon,),
         )
+        .nest("/api/v1", apis)
+        .fallback(handler_404)
+        .layer(cors)
         .layer(trace_layer)
         .with_state(state);
 
