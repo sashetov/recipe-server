@@ -13,7 +13,7 @@ extern crate mime;
 
 use axum::{
     self,
-    extract::{Path, Query, State},
+    extract::{Path, Query, State, Json},
     http,
     response::{self, IntoResponse},
     routing,
@@ -134,7 +134,9 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         .on_response(trace::DefaultOnResponse::new().level(tracing::Level::INFO));
 
     let apis = axum::Router::new()
-        .route("/recipe/{recipe_id}", routing::get(api::get_recipe));
+        .route("/recipe/{recipe_id}", routing::get(api::get_recipe))
+        .route("/recipe-by-ingredients", routing::get(api::get_recipe_by_ingredients))
+        .route("/random-recipe", routing::get(api::get_random_recipe));
 
     let cors = tower_http::cors::CorsLayer::new()
         .allow_methods([http::Method::GET])

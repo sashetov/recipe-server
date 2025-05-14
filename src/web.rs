@@ -1,35 +1,8 @@
 use crate::*;
-
 #[derive(Deserialize)]
 pub struct GetRecipeParams {
     id: Option<String>,
     ingredients: Option<String>,
-}
-
-async fn recipe_by_ingredients(db: &SqlitePool, ingredients: &str) -> Result<Option<String>, sqlx::Error> {
-    let mut rtx = db.begin().await?;
-    sqlx::query("DROP TABLE IF EXISTS qingredients;").execute(&mut *rtx).await?;
-    sqlx::query("CREATE TEMPORARY TABLE qingredients (ingredient_amount VARCHR(200));")
-        .execute(&mut *rtx)
-        .await?;
-    for ingredient_amount in ingredients.split(',') {
-        sqlx::query("INSERT INTO qingredients VALUES ($1);")
-            .bind(ingredient_amount)
-            .execute(&mut *rtx)
-            .await?;
-    }
-    let recipe_ids = sqlx::query("SELECT DISTINCT recipe_id FROM ingredients JOIN qingredients ON ingredients.ingredient_amount LIKE '%' || qingredients.ingredient_amount || '%' ORDER BY RANDOM() LIMIT 1;")
-        .fetch_all(&mut *rtx)
-        .await?;
-    let nrecipe_ids = recipe_ids.len();
-    let result = if nrecipe_ids == 1 {
-        Some(recipe_ids[0].get(0))
-    } else {
-        None
-    };
-    rtx.commit().await?;
-
-    Ok(result)
 }
 
 pub async fn get_recipe(
@@ -69,7 +42,7 @@ pub async fn get_recipe(
             }
         }
 
-        let recipe_result = recipe_by_ingredients(&db, &ingredients_string).await;
+        let recipe_result = recipe::get_by_ingredients(&db, ingredients_string.split(',')).await;
         match recipe_result {
             Ok(Some(id)) => {
                 let uri = format!("/?id={}", id);
@@ -85,13 +58,10 @@ pub async fn get_recipe(
         }
     }
 
-    // Random.
-    let recipe_result = sqlx::query_scalar!("SELECT id FROM recipes ORDER BY RANDOM() LIMIT 1;")
-        .fetch_one(&db)
-        .await;
+    let recipe_result = recipe::get_random(&db).await;
     match recipe_result {
         Ok(id) => {
-            let uri = format!("/?id={}", id);
+            let uri = format!("/?id={}", id.to_string());
             Ok(response::Redirect::to(&uri).into_response())
         }
         Err(e) => {

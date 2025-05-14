@@ -72,3 +72,37 @@ pub async fn get(db: &SqlitePool, recipe_id: &str) -> Result<(Recipe, Vec<String
 
     Ok((recipe, ingredient_amount))
 }
+
+pub async fn get_by_ingredients<'a, I>(db: &SqlitePool, ingredients: I) -> Result<Option<String>, sqlx::Error>
+    where I: Iterator<Item=&'a str>
+{
+    let mut rtx = db.begin().await?;
+    sqlx::query("DROP TABLE IF EXISTS qingredients;").execute(&mut *rtx).await?;
+    sqlx::query("CREATE TEMPORARY TABLE qingredients (ingredient_amount VARCHR(200));")
+        .execute(&mut *rtx)
+        .await?;
+    for ingredient_amount in ingredients {
+        sqlx::query("INSERT INTO qingredients VALUES ($1);")
+            .bind(ingredient_amount)
+            .execute(&mut *rtx)
+            .await?;
+    }
+    let recipe_ids = sqlx::query("SELECT DISTINCT recipe_id FROM ingredients JOIN qingredients ON ingredients.ingredient_amount = qingredients.ingredient_amount ORDER BY RANDOM() LIMIT 1;")
+        .fetch_all(&mut *rtx)
+        .await?;
+    let nrecipe_ids = recipe_ids.len();
+    let result = if nrecipe_ids == 1 {
+        Some(recipe_ids[0].get(0))
+    } else {
+        None
+    };
+    rtx.commit().await?;
+
+    Ok(result)
+}
+
+pub async fn get_random(db: &SqlitePool) -> Result<i64, sqlx::Error> {
+    sqlx::query_scalar!("SELECT id FROM recipes ORDER BY RANDOM() LIMIT 1;")
+        .fetch_one(db)
+        .await
+}
