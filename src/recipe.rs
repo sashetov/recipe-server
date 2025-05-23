@@ -8,7 +8,7 @@ use crate::RecipeError;
 
 use serde::Deserialize;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct JsonRecipe {
     id: i64,
     title: String,
