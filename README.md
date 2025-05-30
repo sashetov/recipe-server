@@ -32,3 +32,6 @@ or all of the above in one line:
 export DATABASE_URL="sqlite://db.db"; rm -f db.db &&  sqlx database create && sqlx migrate info --source ./migrations/ &&  sqlx migrate run && cargo run --release -- --init-from assets/static/recipes.json --db-uri 'sqlite://db.db'
 ```
 which I've placed in run.sh
+
+### API Docs
+Once running, you can access api docs from the /swagger-ui and /redoc URL's
