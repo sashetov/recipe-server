@@ -1,4 +1,5 @@
 use crate::*;
+
 #[derive(Deserialize)]
 pub struct GetRecipeParams {
     id: Option<String>,
@@ -66,7 +67,10 @@ pub async fn get_recipe(
         }
         Err(e) => {
             log::error!("recipe selection failed: {}", e);
-            panic!("recipe selection failed");
+            let ingredient_string = "empty".to_string();
+            let recipe = app_writer.current_recipe.clone();
+            let recipe = IndexTemplate::new(recipe, ingredient_string);
+            Ok(response::Html(recipe.to_string()).into_response())
         }
     }
 }

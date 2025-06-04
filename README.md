@@ -35,3 +35,19 @@ which I've placed in run.sh
 
 ### API Docs
 Once running, you can access api docs from the /swagger-ui and /redoc URL's
+
+### Docker
+## Docker
+Install docker
+```
+docker build -t rs .
+```
+You can run the image with
+
+```
+docker run -p 3000:3000 rs
+```
+
+## License
+
+This work is made available under the "MIT License". See the file `LICENSE.txt` in this distribution for license terms.

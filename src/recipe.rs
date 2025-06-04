@@ -106,3 +106,33 @@ pub async fn get_random(db: &SqlitePool) -> Result<i64, sqlx::Error> {
         .fetch_one(db)
         .await
 }
+
+pub async fn add(db: &SqlitePool, recipe: JsonRecipe) -> Result<(), sqlx::Error> {
+    let mut jtx = db.begin().await?;
+
+    sqlx::query!(
+        r#"INSERT INTO recipes
+        (id, title, category, preparation)
+        VALUES ($1, $2, $3, $4);"#,
+        recipe.id,
+        recipe.title,
+        recipe.category,
+        recipe.preparation,
+    )
+    .execute(&mut *jtx)
+    .await?;
+
+    for ingredient in recipe.ingredient_amount {
+        sqlx::query!(
+            r#"INSERT INTO ingredients(recipe_id, ingredient_amount) VALUES ($1, $2);"#,
+            recipe.id,
+            ingredient,
+        )
+            .execute(&mut *jtx)
+            .await?;
+    }
+
+    jtx.commit().await?;
+    Ok(())
+}
+
