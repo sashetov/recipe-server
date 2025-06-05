@@ -2,13 +2,12 @@
 
 ## Table of Contents
 
-- [rs-client-yew](#rs-client-yew)
-  - [About](#about)
-  - [Install WASM Target:](#install-wasm-target:)
-  - [Install trunk:](#install-trunk:)
-  - [Build](#build)
-  - [Serve](#serve)
-  - [License](#license)
+- [About](#about)
+- [Install WASM Target](#install-wasm-target)
+- [Install trunk](#install-trunk)
+- [Build](#build)
+- [Serve](#serve)
+- [License](#license)
 
 ## About
 
@@ -16,12 +15,12 @@ Web Client/Frontend for the Recipe Server.
 
 Based on upstream https://github.com/pdx-cs-rust-web/kk2-client-yew
 
-## Install WASM Target:
+## Install WASM Target
 ```
 rustup target add wasm32-unknown-unknown
 ```
 
-## Install trunk:
+## Install trunk
 ```
 cargo install --locked trunk
 ```
