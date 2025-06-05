@@ -6,7 +6,7 @@
     - [Description](#description)
     - [What was done](#what-was-done)
     - [What did not go so well/TODO](#what-did-not-go-so-well/todo)
-    - [Initial setup and migrations:](#initial-setup-and-migrations:)
+    - [Initial setup and migrations](#initial-setup-and-migrations)
       - [Install SQLX CLI](#install-sqlx-cli)
       - [Rest of initial setup](#rest-of-initial-setup)
     - [Build and run it with cargo](#build-and-run-it-with-cargo)
@@ -38,7 +38,7 @@ The style and css can be improved and the site can be made responsive and to loo
 Internationalization could be implemented.
 An interface for registration, authentication and authorization to post new recipes or edit existing ones could be implemented, possily in a wiki-like manner.
 
-### Initial setup and migrations:
+### Initial setup and migrations
 
 #### Install SQLX CLI
 ```
