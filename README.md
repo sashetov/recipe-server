@@ -2,7 +2,7 @@
 ## Table of Contents
 
 - [PDX PSU CS-510 Spring 2025 Rust Web ![Build Status](https://github.com/sashetov/recipe-server/actions/workflows/rust.yml/badge.svg)](#pdx-psu-cs-510-spring-2025-rust-web-![build-status]https://githubcom/sashetov/recipe-server/actions/workflows/rustyml/badgesvg)
-  - [`recipe-server`](#`recipe-server`)
+  - [recipe-server](#recipe-server)
     - [Description](#description)
     - [What was done](#what-was-done)
     - [What did not go so well/TODO](#what-did-not-go-so-well/todo)
@@ -12,10 +12,10 @@
     - [Build and run it with cargo](#build-and-run-it-with-cargo)
     - [API Docs](#api-docs)
     - [Docker](#docker)
-  - [`recipe-client`](#`recipe-client`)
+  - [recipe-client](#recipe-client)
   - [License](#license)
 
-## `recipe-server`
+## recipe-server
 ### Description
 
 Serves MIT licensed recipes. Recipes retrieved from https://github.com/Donearm/Cooking-Recipes/tree/master, which is MIT licensed and so the current license preserves that.
@@ -84,7 +84,7 @@ You can run the image as a daemon with:
 ```
 docker run -d -p 3000:3000 rs
 ```
-## `recipe-client`
+## recipe-client
 The README for that is located here: [Client Readme](./client/README.md)
 
 ## License
