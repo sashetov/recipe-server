@@ -1,19 +1,18 @@
 # PDX PSU CS-510 Spring 2025 Rust Web ![Build Status](https://github.com/sashetov/recipe-server/actions/workflows/rust.yml/badge.svg)
 ## Table of Contents
 
-- [PDX PSU CS-510 Spring 2025 Rust Web ![Build Status](https://github.com/sashetov/recipe-server/actions/workflows/rust.yml/badge.svg)](#pdx-psu-cs-510-spring-2025-rust-web-![build-status]https://githubcom/sashetov/recipe-server/actions/workflows/rustyml/badgesvg)
-  - [recipe-server](#recipe-server)
-    - [Description](#description)
-    - [What was done](#what-was-done)
-    - [What did not go so well/TODO](#what-did-not-go-so-well/todo)
-    - [Initial setup and migrations](#initial-setup-and-migrations)
-      - [Install SQLX CLI](#install-sqlx-cli)
-      - [Rest of initial setup](#rest-of-initial-setup)
-    - [Build and run it with cargo](#build-and-run-it-with-cargo)
-    - [API Docs](#api-docs)
-    - [Docker](#docker)
-  - [recipe-client](#recipe-client)
-  - [License](#license)
+- [recipe-server](#recipe-server)
+  - [Description](#description)
+  - [What was done](#what-was-done)
+  - [What did not go so well/TODO](#what-did-not-go-so-well/todo)
+  - [Initial setup and migrations](#initial-setup-and-migrations)
+    - [Install SQLX CLI](#install-sqlx-cli)
+    - [Rest of initial setup](#rest-of-initial-setup)
+  - [Build and run it with cargo](#build-and-run-it-with-cargo)
+  - [API Docs](#api-docs)
+  - [Docker](#docker)
+- [recipe-client](#recipe-client)
+- [License](#license)
 
 ## recipe-server
 ### Description
