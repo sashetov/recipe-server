@@ -55,7 +55,7 @@ You can run the image as a daemon with:
 docker run -d -p 3000:3000 rs
 ```
 ## `recipe-client`
-The README for that is located here: [Client Readme](./client/readme.md)
+The README for that is located here: [Client Readme](./client/README.md)
 
 ## License
 
