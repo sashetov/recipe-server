@@ -1,5 +1,6 @@
 recipes
 target
-db.db-*
+db.db*
 .*.sw*
 secrets
+db/

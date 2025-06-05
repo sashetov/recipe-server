@@ -8,6 +8,13 @@ Much of the original inspiration for the web app itself comes from code written 
 
 
 ### Initial setup and migrations:
+
+#### Install SQLX CLI
+```
+cargo install sqlx-cli
+```
+
+#### Rest of initial setup
 ```
 $ rm -f db.db
 $ export DATABASE_URL="sqlite://db.db"
@@ -42,10 +49,10 @@ Install docker
 ```
 docker build -t rs .
 ```
-You can run the image with
+You can run the image as a daemon with:
 
 ```
-docker run -p 3000:3000 rs
+docker run -d -p 3000:3000 rs
 ```
 
 ## License

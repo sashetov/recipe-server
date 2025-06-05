@@ -44,7 +44,7 @@ use std::sync::Arc;
 
 #[derive(Parser)]
 struct Args {
-    #[arg(short, long, name = "init-from")]
+    #[arg(long, name = "init-from")]
     init_from: Option<std::path::PathBuf>,
     #[arg(short, long, name = "db-uri")]
     db_uri: Option<String>,
@@ -86,7 +86,7 @@ fn get_db_uri(db_uri: Option<&str>) -> Cow<str> {
     } else if let Ok(db_uri) = std::env::var("DB_URI") {
         db_uri.into()
     } else {
-        "sqlite://db.db".into()
+        "sqlite://db/db.db".into()
     }
 }
 
