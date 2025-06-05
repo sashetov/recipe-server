@@ -18,11 +18,11 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build Release
       env:
-        DATABASE_URL: "sqlite://db.db"
+        DATABASE_URL: "sqlite://db/db.db"
       run: |
         cargo build --release
     - name: Clippy
       env:
-        DATABASE_URL: "sqlite://db.db"
+        DATABASE_URL: "sqlite://db/db.db"
       run: |
         cargo clippy
