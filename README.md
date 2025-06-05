@@ -31,8 +31,8 @@ cargo install sqlx-cli
 
 #### Rest of initial setup
 ```
-$ rm -f db.db
-$ export DATABASE_URL="sqlite://db.db"
+$ rm -f db/db.db
+$ export DATABASE_URL="sqlite://db/db.db"
 $ sqlx database create
 $ sqlx migrate add -r -s migrate
 $ sqlx migrate info --source ./migrations/
@@ -44,14 +44,14 @@ $ cargo sqlx prepare --check
 
 ### Build and run it with cargo
 ```
-$ export DATABASE_URL='sqlite://db.db'
+$ export DATABASE_URL='sqlite://db/db.db'
 $ cargo build && \
    cargo clippy && \
-   cargo run --release -- --init-from assets/static/recipes.json --db-uri 'sqlite://db.db'
+   cargo run --release -- --init-from assets/static/recipes.json --db-uri 'sqlite://db/db.db'
 ```
 or all of the above in one line:
 ```
-export DATABASE_URL="sqlite://db.db"; rm -f db.db &&  sqlx database create && sqlx migrate info --source ./migrations/ &&  sqlx migrate run && cargo run --release -- --init-from assets/static/recipes.json --db-uri 'sqlite://db.db'
+export DATABASE_URL="sqlite://db/db.db"; rm -f db/db.db &&  sqlx database create && sqlx migrate info --source ./migrations/ &&  sqlx migrate run && cargo run --release -- --init-from assets/static/recipes.json --db-uri 'sqlite://db/db.db'
 ```
 which I've placed in run.sh
 
@@ -75,4 +75,3 @@ The README for that is located here: [Client Readme](./client/README.md)
 ## License
 
 This work is made available under the "MIT License". See the file `LICENSE.txt` in this distribution for license terms.
-
