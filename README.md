@@ -1,4 +1,4 @@
-# PDX PSU CS-586 Spring 2025 Rust Web ![Build Status](https://github.com/sashetov/recipe-server/actions/workflows/rust.yml/badge.svg)
+# PDX PSU CS-510 Spring 2025 Rust Web ![Build Status](https://github.com/sashetov/recipe-server/actions/workflows/rust.yml/badge.svg)
 ## `recipe-server`
 ### Description
 
@@ -6,6 +6,21 @@ Serves MIT licensed recipes. Recipes retrieved from https://github.com/Donearm/C
 
 Much of the original inspiration for the web app itself comes from code written during the rust class, so from different branches in this repository: https://github.com/pdx-cs-rust-web/knock-knock-2, which is also MIT licensed, for similar reasons. The code is updated as updates happen in `knock-knock-2` repo, which we follow as an upstream source.
 
+### What was done
+
+This project mostly tracks the upstream repos:
+https://github.com/pdx-cs-rust-web/knock-knock-2
+https://github.com/pdx-cs-rust-web/kk2-client-yew
+
+As a part of the CS-510 Rust Web class I would merge in the new commits as the class went along to my code.
+The main difference between upstream and this app is the content is different, the fields in the json format are different and the tables are different, albeit very similar.
+
+### What did not go so well/TODO
+
+The project can be improved by following the fields of the recipes in https://github.com/Donearm/Cooking-Recipes/tree/master more closely and also display images.
+The style and css can be improved and the site can be made responsive and to look nice under different browsers and devices.
+Internationalization could be implemented.
+An interface for registration, authentication and authorization to post new recipes or edit existing ones could be implemented, possily in a wiki-like manner.
 
 ### Initial setup and migrations:
 
