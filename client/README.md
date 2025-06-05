@@ -1,5 +1,15 @@
 # rs-client-yew
 
+## Table of Contents
+
+- [rs-client-yew](#rs-client-yew)
+  - [About](#about)
+  - [Install WASM Target:](#install-wasm-target:)
+  - [Install trunk:](#install-trunk:)
+  - [Build](#build)
+  - [Serve](#serve)
+  - [License](#license)
+
 ## About
 
 Web Client/Frontend for the Recipe Server.
