@@ -12,7 +12,6 @@
     - [Build and run it with cargo](#build-and-run-it-with-cargo)
     - [API Docs](#api-docs)
     - [Docker](#docker)
-  - [Docker](#docker)
   - [`recipe-client`](#`recipe-client`)
   - [License](#license)
 
@@ -76,7 +75,6 @@ which I've placed in run.sh
 Once running, you can access api docs from the /swagger-ui and /redoc URL's
 
 ### Docker
-## Docker
 Install docker
 ```
 docker build -t rs .
